@@ -1,22 +1,32 @@
-import { useState } from 'react'
-import './tw-styles.css'
-import TitleBar from './components/TitleBar'
-import MapDisplay from './components/MapDisplay'
-import PlaqueModal from './components/PlaqueModal'
+import { useState } from "react";
+import MapDisplay from "./components/MapDisplay";
+import PlaqueModal from "./components/PlaqueModal";
 
+export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  // ✅提升状态：selectedPlaque 放在 App
+  const [selectedPlaque, setSelectedPlaque] = useState(null);
 
-return (
-  <div className="mx-auto max-w-screen-xl bg-gray-50 min-h-screen">
-    <TitleBar title="📚 OpenPlaques Reading Recommendations" />
-    <MapDisplay longitude={-2.78479} latitude={54.05213} zoom={16} />
-    {isModalOpen ? <PlaqueModal /> : null}
-  </div>
-)
+  return (
+    <div>
+      {/* Map gets plaque state */}
+      <MapDisplay
+        longitude={-0.13731}
+        latitude={51.521699}
+        zoom={13}
+        setIsModalOpen={setIsModalOpen}
+        selectedPlaque={selectedPlaque}
+        setSelectedPlaque={setSelectedPlaque}
+      />
 
-
+      {/* Modal also gets plaque state */}
+      {isModalOpen ? (
+        <PlaqueModal
+          setIsModalOpen={setIsModalOpen}
+          selectedPlaque={selectedPlaque}
+        />
+      ) : null}
+    </div>
+  );
 }
-
-export default App

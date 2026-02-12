@@ -1,27 +1,98 @@
-export default function PlaqueModal() {
+import { useState, useEffect } from "react";
+import BookListItem from "./BookListItem";
+
+export default function PlaqueModal({ selectedPlaque, setIsModalOpen }) {
+  const [books, setBooks] = useState([]);
+
+  // ✅ Fetch books from OpenLibrary
+  async function fetchBooks() {
+    const author =
+      selectedPlaque?.properties?.lead_subject_name ||
+      selectedPlaque?.properties?.name ||
+      selectedPlaque?.properties?.title;
+
+    if (!author) return;
+
+    try {
+      const response = await fetch(
+        `https://openlibrary.org/search.json?author=${author}&limit=5`
+      );
+
+      const data = await response.json();
+
+      console.log("Fetched books data:", data);
+
+      setBooks(data.docs);
+    } catch (error) {
+      console.error("Error fetching books data:", error);
+    }
+  }
+
+  // ✅ useEffect runs once when Modal mounts
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
   return (
     <div
-      className="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
+      style={{
+        position: "absolute",
+        zIndex: 9999,
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0,0,0,0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-        <h2
-          id="modalTitle"
-          className="text-xl font-bold text-gray-900 sm:text-2xl"
-        >
-          Modal Title
+      {/* Modal Box */}
+      <div
+        style={{
+          width: "500px",
+          maxHeight: "80vh",
+          overflowY: "auto",
+          background: "white",
+          padding: "20px",
+          borderRadius: "12px",
+        }}
+      >
+        <h2 style={{ marginBottom: "15px" }}>
+          Recommended Reading for{" "}
+          {selectedPlaque?.properties?.lead_subject_name ||
+            selectedPlaque?.properties?.name ||
+            "Unknown Author"}
         </h2>
 
-        <div className="mt-4">
-          <p className="text-pretty text-gray-700">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-            euismod, nisi eu consectetur. Sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
-          </p>
+        {/* ✅ Render book list */}
+        <div style={{ marginTop: "15px" }}>
+          {books.length === 0 ? (
+            <p>Loading recommended reading...</p>
+          ) : (
+            books.map((book) => (
+              <BookListItem
+                key={book.cover_edition_key || book.key}
+                book={book}
+              />
+            ))
+          )}
         </div>
+
+        {/* Close Button */}
+        <button
+          style={{
+            marginTop: "15px",
+            padding: "8px 12px",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+          onClick={() => setIsModalOpen(false)}
+        >
+          Close
+        </button>
       </div>
     </div>
-  )
+  );
 }

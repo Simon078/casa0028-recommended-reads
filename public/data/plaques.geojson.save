@@ -1,0 +1,32 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id1": 1,
+        "lead_subject_name": "Ada Lovelace",
+        "lead_subject_wikipedia": "https://en.wikipedia.org/wiki/Ada_Lovelace"
+      },
+      "geometry": { "type": "Point", "coordinates": [-0.1419, 51.5154] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id1": 2,
+        "lead_subject_name": "Charles Dickens",
+        "lead_subject_wikipedia": "https://en.wikipedia.org/wiki/Charles_Dickens"
+      },
+      "geometry": { "type": "Point", "coordinates": [-0.1195, 51.5136] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id1": 3,
+        "lead_subject_name": "Virginia Woolf",
+        "lead_subject_wikipedia": "https://en.wikipedia.org/wiki/Virginia_Woolf"
+      },
+      "geometry": { "type": "Point", "coordinates": [-0.1340, 51.5270] }
+    }
+  ]
+}
